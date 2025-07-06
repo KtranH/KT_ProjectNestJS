@@ -1,10 +1,5 @@
 import { Injectable } from '@nestjs/common';
-
-export interface Task {
-  id: number;
-  name: string;
-  description: string;
-}
+import { Task } from './task.interface';
 
 @Injectable()
 export class TaskService {
@@ -51,13 +46,18 @@ export class TaskService {
     }
   }
   // Cập nhật task
-  updateTask(id: number, task: Task): Task[] {
+  updateTask(id: number, taskUpdate: Partial<Task>): Task {
     try {
       const index = this.tasks.findIndex((task) => task.id === id);
       if (index !== -1) {
-        this.tasks[index] = task;
+        this.tasks[index] = {
+          ...this.tasks[index],
+          ...taskUpdate,
+          id: id, // Đảm bảo id không bị thay đổi
+        };
+        return this.tasks[index];
       }
-      return this.tasks;
+      throw new Error(`Task với id ${id} không tồn tại`);
     } catch (error) {
       console.error('Error in updateTask:', error);
       throw error;
