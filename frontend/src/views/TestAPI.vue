@@ -1,5 +1,5 @@
 <template>
-  <div class="w-full min-h-screen bg-gradient-to-br from-gray-50 to-blue-50 py-12">
+  <div class="w-full min-h-screen bg-gradient-to-br from-gray-50 to-blue-50 py-12 mt-12">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <!-- Header -->
       <div class="text-center mb-12">
@@ -208,7 +208,7 @@
             <div class="bg-gradient-to-r from-blue-50 to-indigo-50 p-4 rounded-lg border border-blue-200">
               <div class="flex items-center gap-3 mb-2">
                 <span class="px-2 py-1 bg-blue-100 text-blue-800 text-xs font-semibold rounded">GET</span>
-                <code class="text-sm font-mono text-gray-700">/health</code>
+                <code class="text-sm font-mono text-gray-700">/api/health</code>
               </div>
               <p class="text-sm text-gray-600">Kiểm tra trạng thái server</p>
             </div>
@@ -216,7 +216,7 @@
             <div class="bg-gradient-to-r from-green-50 to-emerald-50 p-4 rounded-lg border border-green-200">
               <div class="flex items-center gap-3 mb-2">
                 <span class="px-2 py-1 bg-green-100 text-green-800 text-xs font-semibold rounded">GET</span>
-                <code class="text-sm font-mono text-gray-700">/users</code>
+                <code class="text-sm font-mono text-gray-700">/api/users</code>
               </div>
               <p class="text-sm text-gray-600">Lấy danh sách người dùng</p>
             </div>
@@ -241,7 +241,7 @@ const usersError = ref(null)
 const users = ref([])
 
 // API base URL
-const API_BASE_URL = 'http://localhost:3000'
+const API_BASE_URL = 'http://localhost:3000/api'
 
 const checkBackendStatus = async () => {
   backendLoading.value = true

@@ -12,6 +12,12 @@ const routes = [
     component: () => import('@/views/TestAPI.vue')
   },
   {
+    path: '/task',
+    name: 'Task',
+    component: () => import('@/views/Task.vue')
+    
+  },
+  {
     path: '/about',
     name: 'About',
     component: () => import('@/views/About.vue')
