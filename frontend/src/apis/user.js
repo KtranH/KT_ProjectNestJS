@@ -1,21 +1,17 @@
-// Các API task 1
+// Các API task 2
 import { api } from './config';
 
-export const Task1API = {
-    getTasks: async () => {
-        console.log('API: getTasks called');
-        return await api.get('/tasks');
+export const task2API = {
+    getUsers: async () => {
+        console.log('API: getUsers called');
+        return await api.get('/task2');
     },
-    addTask: async (task) => {
-        console.log('API: addTask called with:', task);
-        return await api.post('/tasks', task);
+    getUserById: async (id) => {
+        console.log('API: getUserById called with:', id);
+        return await api.get(`/task2/${id}`);
     },
-    updateTask: async (id, task) => {
-        console.log('API: updateTask called with:', { id, task });
-        return await api.put(`/tasks/${id}`, task);
-    },
-    deleteTask: async (id) => {
-        console.log('API: deleteTask called with:', id);
-        return await api.delete(`/tasks/${id}`);
+    addUser: async (user) => {
+        console.log('API: addUser called with:', user);
+        return await api.post('/task2', user);
     },
 }

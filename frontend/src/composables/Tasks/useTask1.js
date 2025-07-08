@@ -1,5 +1,5 @@
 import { ref } from 'vue';
-import { Task1API } from '@/apis/user';
+import { Task1API } from '@/apis/task';
 import { toast } from 'vue3-toastify';
 import 'vue3-toastify/dist/index.css';
 

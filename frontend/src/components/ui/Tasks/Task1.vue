@@ -221,8 +221,6 @@ import { ref, onMounted } from 'vue';
 import { useTask1 } from '@/composables/Tasks/useTask1';
 import Swal from 'sweetalert2';
 import 'sweetalert2/dist/sweetalert2.min.css';
-import { toast } from 'vue3-toastify';
-import 'vue3-toastify/dist/index.css';
 
 export default {
     name: 'Task1',

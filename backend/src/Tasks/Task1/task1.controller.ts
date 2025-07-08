@@ -9,11 +9,11 @@ import {
   HttpException,
   HttpStatus,
 } from '@nestjs/common';
-import { TaskService } from './task.service';
-import { Task } from './task.interface';
-import { TaskRequest, UpdateTaskRequest } from './task.request';
+import { TaskService } from './task1.service';
+import { Task } from './task1.interface';
+import { TaskRequest, UpdateTaskRequest } from './task1.request';
 
-@Controller('tasks')
+@Controller('task1')
 export class TaskController {
   constructor(private readonly taskService: TaskService) {}
 
