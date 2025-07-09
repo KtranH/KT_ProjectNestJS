@@ -14,4 +14,12 @@ export const task2API = {
         console.log('API: addUser called with:', user);
         return await api.post('/task2', user);
     },
+    updateUser: async (userId, user) => {
+        console.log('API: updateUser called with:', userId, user);
+        return await api.put(`/task2/${userId}`, user);
+    },
+    deleteUser: async (userId) => {
+        console.log('API: deleteUser called with:', userId);
+        return await api.delete(`/task2/${userId}`);
+    },
 }

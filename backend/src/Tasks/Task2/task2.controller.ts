@@ -6,9 +6,11 @@ import {
   Param,
   Post,
   Body,
+  Put,
+  Delete,
 } from '@nestjs/common';
 import { Task2Service } from './task2.service';
-import { UserRequest } from './tast2.request';
+import { UpdateUserRequest, UserRequest } from './tast2.request';
 
 @Controller('task2')
 export class Task2Controller {
@@ -76,5 +78,28 @@ export class Task2Controller {
         HttpStatus.INTERNAL_SERVER_ERROR,
       );
     }
+  }
+
+  // Cập nhật user
+  @Put(':id')
+  async update(
+    @Param('id') id: string,
+    @Body() user: UpdateUserRequest,
+  ): Promise<object> {
+    await this.task2Service.updateUser(Number(id), user);
+    return {
+      status: 'success',
+      message: 'Cập nhật user thành công',
+    };
+  }
+
+  // Xóa user
+  @Delete(':id')
+  async delete(@Param('id') id: string): Promise<object> {
+    await this.task2Service.deleteUser(Number(id));
+    return {
+      status: 'success',
+      message: 'Xóa user thành công',
+    };
   }
 }

@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsString } from 'class-validator';
+import { IsNotEmpty, IsOptional, IsString } from 'class-validator';
 
 export class UserRequest {
   @IsNotEmpty()
@@ -8,4 +8,16 @@ export class UserRequest {
   @IsNotEmpty()
   @IsString()
   password: string;
+}
+
+export class UpdateUserRequest {
+  @IsOptional()
+  @IsNotEmpty()
+  @IsString()
+  username?: string;
+
+  @IsOptional()
+  @IsNotEmpty()
+  @IsString()
+  password?: string;
 }

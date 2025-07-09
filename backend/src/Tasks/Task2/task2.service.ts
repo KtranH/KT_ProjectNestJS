@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { Task2Repository } from './task2.repository';
 import { User } from '../../entities/user.entity';
-import { UserRequest } from './tast2.request';
+import { UpdateUserRequest, UserRequest } from './tast2.request';
 
 @Injectable()
 export class Task2Service {
@@ -20,5 +20,15 @@ export class Task2Service {
   // Thêm user
   async addUser(user: UserRequest): Promise<User> {
     return await this.task2Repository.addUser(user);
+  }
+
+  // Cập nhật user
+  async updateUser(id: number, user: UpdateUserRequest): Promise<void> {
+    return await this.task2Repository.updateUser(id, user);
+  }
+
+  // Xóa user
+  async deleteUser(id: number): Promise<void> {
+    await this.task2Repository.deleteUser(id);
   }
 }

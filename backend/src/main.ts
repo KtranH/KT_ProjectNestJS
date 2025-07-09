@@ -1,6 +1,9 @@
 import { NestFactory } from '@nestjs/core';
 import { ValidationPipe } from '@nestjs/common';
 import { AppModule } from './app.module';
+import { Request, Response } from 'express';
+import * as csurf from 'csurf';
+import * as cookieParser from 'cookie-parser';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -10,6 +13,27 @@ async function bootstrap() {
     origin: ['http://localhost:5173', 'http://localhost:3000'],
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
     credentials: true,
+  });
+
+  // Thêm cookie-parser trước csurf
+  app.use(cookieParser());
+
+  // Thêm middleware csurf, cấu hình lấy token từ cookie
+  app.use(
+    csurf({
+      cookie: {
+        httpOnly: true,
+        sameSite: 'lax',
+      },
+    }),
+  );
+
+  // Middleware để gửi CSRF token về frontend qua header
+  app.use((req: Request, res: Response, next) => {
+    res.cookie('XSRF-TOKEN', req.csrfToken ? req.csrfToken() : '', {
+      sameSite: 'lax',
+    });
+    next();
   });
 
   // Thêm ValidationPipe

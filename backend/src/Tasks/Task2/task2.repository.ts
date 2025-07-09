@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from '../../entities/user.entity';
-import { UserRequest } from './tast2.request';
+import { UpdateUserRequest, UserRequest } from './tast2.request';
 @Injectable()
 export class Task2Repository {
   constructor(
@@ -21,5 +21,13 @@ export class Task2Repository {
   async addUser(user: UserRequest): Promise<User> {
     const newUser = this.userRepository.create(user);
     return await this.userRepository.save(newUser);
+  }
+
+  async updateUser(id: number, user: UpdateUserRequest): Promise<void> {
+    await this.userRepository.update(id, user);
+  }
+
+  async deleteUser(id: number): Promise<void> {
+    await this.userRepository.delete(id);
   }
 }
