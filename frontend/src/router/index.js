@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import { requireAuth, requireGuest } from './guards/auth.js'
 
 const routes = [
   {
@@ -7,15 +8,28 @@ const routes = [
     component: () => import('@/views/Home.vue')
   },
   {
+    path: '/login',
+    name: 'Login',
+    component: () => import('@/views/Login.vue'),
+    beforeEnter: requireGuest
+  },
+  {
+    path: '/dashboard',
+    name: 'Dashboard',
+    component: () => import('@/views/Dashboard.vue'),
+    beforeEnter: requireAuth
+  },
+  {
     path: '/test-api',
     name: 'TestAPI',
-    component: () => import('@/views/TestAPI.vue')
+    component: () => import('@/views/TestAPI.vue'),
+    beforeEnter: requireAuth
   },
   {
     path: '/task',
     name: 'Task',
-    component: () => import('@/views/Task.vue')
-    
+    component: () => import('@/views/Task.vue'),
+    beforeEnter: requireAuth
   },
   {
     path: '/about',
@@ -24,8 +38,8 @@ const routes = [
   },
   // Redirect old routes to new ones
   {
-    path: '/dashboard',
-    redirect: '/test-api'
+    path: '/dashboard-old',
+    redirect: '/dashboard'
   },
   {
     path: '/tailwind-demo',

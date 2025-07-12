@@ -2,7 +2,7 @@ import axios from 'axios';
 
 export const API_URL = 'http://localhost:3000/api';
 
-//RESTfull API
+// RESTfull API
 export const api = axios.create({
     baseURL: API_URL,
     timeout: 10000,
@@ -12,6 +12,11 @@ export const api = axios.create({
     },
 });
 
+// Hàm lấy token từ localStorage
+function getToken() {
+    return localStorage.getItem('access_token');
+}
+
 // Hàm lấy CSRF token từ cookie
 function getCookie(name) {
     const value = `; ${document.cookie}`;
@@ -20,8 +25,13 @@ function getCookie(name) {
     return '';
 }
 
-// Thêm interceptor để tự động gửi CSRF token vào header
+// Thêm interceptor để tự động gửi JWT token vào header
 api.interceptors.request.use((config) => {
+    const token = getToken();
+    if (token) {
+        config.headers['Authorization'] = `Bearer ${token}`;
+    }
+    
     const csrfToken = getCookie('XSRF-TOKEN');
     if (csrfToken) {
         config.headers['X-CSRF-Token'] = csrfToken;
@@ -29,4 +39,19 @@ api.interceptors.request.use((config) => {
     config.withCredentials = true;
     return config;
 });
+
+// Thêm interceptor để xử lý response
+api.interceptors.response.use(
+    (response) => response,
+    (error) => {
+        if (error.response?.status === 401) {
+            // Token hết hạn hoặc không hợp lệ
+            localStorage.removeItem('access_token');
+            localStorage.removeItem('user');
+            window.location.href = '/login';
+        }
+        return Promise.reject(error);
+    }
+);
+
 

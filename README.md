@@ -1,102 +1,121 @@
-# NestJS + Vue Full-Stack Project
+# Project NestJS + Vue 3
 
-Dự án full-stack sử dụng NestJS làm backend API và Vue.js (với Vite) làm frontend.
+Dự án full-stack sử dụng NestJS cho backend và Vue 3 cho frontend với chức năng đăng nhập JWT.
 
 ## Cấu trúc dự án
 
 ```
 ProjectNestJS/
-├── backend/          # NestJS API server
-├── frontend/         # Vue.js với Vite
-├── package.json      # Scripts chung cho cả dự án
-└── README.md
+├── backend/          # NestJS Backend
+├── frontend/         # Vue 3 Frontend
+└── doc/             # Tài liệu
 ```
 
-## Yêu cầu
+## Cài đặt và chạy
 
-- Node.js >= 18.0.0
-- npm
+### Backend (NestJS)
 
-## Cài đặt
-
-### Cài đặt tất cả dependencies
-
+1. Cài đặt dependencies:
 ```bash
-npm run install:all
-```
-
-### Hoặc cài đặt từng phần
-
-```bash
-# Cài đặt root dependencies
+cd backend
 npm install
-
-# Cài đặt backend dependencies
-cd backend && npm install
-
-# Cài đặt frontend dependencies
-cd frontend && npm install
 ```
 
-## Sử dụng
+2. Cấu hình database:
+- Tạo database PostgreSQL tên `task_management`
+- Cập nhật thông tin kết nối trong `src/config/database.config.ts`
 
-### Chạy cả hai server đồng thời (Development)
+3. Chạy migrations:
+```bash
+npm run migration:run
+```
 
+4. Seed dữ liệu:
+```bash
+npm run seed
+```
+
+5. Chạy server:
+```bash
+npm run start:dev
+```
+
+Server sẽ chạy tại `http://localhost:3000`
+
+### Frontend (Vue 3)
+
+1. Cài đặt dependencies:
+```bash
+cd frontend
+npm install
+```
+
+2. Chạy development server:
 ```bash
 npm run dev
 ```
 
-### Chạy riêng từng server
+Frontend sẽ chạy tại `http://localhost:5173`
 
-```bash
-# Backend NestJS (port 3000)
-npm run dev:backend
+## Chức năng đăng nhập JWT
 
-# Frontend Vue (port 5173)
-npm run dev:frontend
-```
+### Tài khoản test
 
-## Build cho production
+Sau khi chạy seed, bạn có thể sử dụng các tài khoản sau:
 
-```bash
-# Build cả hai
-npm run build
+- **Username:** `admin`, **Password:** `password123`
+- **Username:** `user`, **Password:** `password456`
 
-# Build riêng từng phần
-npm run build:backend
-npm run build:frontend
-```
+### API Endpoints
 
-## Testing
+#### Backend
+- `POST /api/auth/login` - Đăng nhập
+- `GET /api/auth/profile` - Lấy thông tin user (cần JWT token)
 
-```bash
-# Chạy test cho cả hai
-npm run test
+#### Frontend
+- `/login` - Trang đăng nhập
+- `/dashboard` - Dashboard (cần đăng nhập)
+- `/task` - Quản lý task (cần đăng nhập)
 
-# Test riêng từng phần
-npm run test:backend
-npm run test:frontend
-```
+### Tính năng bảo mật
 
-## API Endpoints
+1. **JWT Authentication**: Sử dụng JWT token để xác thực
+2. **Password Hashing**: Mật khẩu được mã hóa bằng bcrypt
+3. **Route Guards**: Bảo vệ các route cần xác thực
+4. **Auto Logout**: Tự động đăng xuất khi token hết hạn
+5. **Token Storage**: Lưu token trong localStorage
 
-Backend NestJS chạy trên: `http://localhost:3000`
+### Cấu hình JWT
 
-Frontend Vue chạy trên: `http://localhost:5173`
+JWT được cấu hình trong `backend/src/Auth/auth.module.ts`:
+- Secret key: `JWT_SECRET` environment variable
+- Expiration: 1 giờ
+- Algorithm: HS256
 
-## Công nghệ sử dụng
+## Cấu trúc code
 
 ### Backend
-- NestJS
-- TypeScript
-- Node.js
+- `src/Auth/` - Module xử lý authentication
+- `src/entities/` - Database entities
+- `src/config/` - Cấu hình database và JWT
 
 ### Frontend
-- Vue.js 3
-- Vite
-- TypeScript (nếu được chọn)
+- `src/apis/` - API calls
+- `src/stores/modules/auth.js` - Auth state management
+- `src/router/guards/` - Route guards
+- `src/components/forms/LoginForm.vue` - Form đăng nhập
 
-### Dev Tools
-- Concurrently (chạy đồng thời nhiều server)
-- ESLint
-- Prettier 
+## Troubleshooting
+
+### Lỗi kết nối database
+- Kiểm tra PostgreSQL đã chạy chưa
+- Kiểm tra thông tin kết nối trong `database.config.ts`
+- Đảm bảo database `task_management` đã được tạo
+
+### Lỗi JWT
+- Kiểm tra `JWT_SECRET` environment variable
+- Đảm bảo token được gửi đúng format: `Bearer <token>`
+
+### Lỗi CORS
+- Backend đã được cấu hình để chấp nhận request từ frontend
+- Kiểm tra URL API trong `frontend/src/apis/config.js` 

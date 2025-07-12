@@ -1,27 +1,32 @@
 import AppDataSource from '../../config/database.config';
 import { User } from '../../entities/user.entity';
-import { Task, TaskStatus } from '../../entities/task.entity';
-import { Comment } from '../../entities/comment.entity';
+//import { Task, TaskStatus } from '../../entities/task.entity';
+//import { Comment } from '../../entities/comment.entity';
+import * as bcrypt from 'bcrypt';
 
 async function seed() {
   await AppDataSource.initialize();
 
+  // Hash passwords
+  const password1 = await bcrypt.hash('password123', 10);
+  const password2 = await bcrypt.hash('password456', 10);
+
   // Seed users
   const user1 = AppDataSource.manager.create(User, {
-    username: 'alice',
-    password: 'hashed_password_1',
+    username: 'admin',
+    password: password1,
     createdAt: new Date(),
     updatedAt: new Date(),
   });
   const user2 = AppDataSource.manager.create(User, {
-    username: 'bob',
-    password: 'hashed_password_2',
+    username: 'user',
+    password: password2,
     createdAt: new Date(),
     updatedAt: new Date(),
   });
   await AppDataSource.manager.save([user1, user2]);
 
-  // Seed tasks
+  /*// Seed tasks
   const task1 = AppDataSource.manager.create(Task, {
     name: 'Task 1',
     description: 'Mô tả task 1',
@@ -55,8 +60,7 @@ async function seed() {
     updatedAt: new Date(),
   });
   await AppDataSource.manager.save([comment1, comment2]);
-
-  console.log('Seed dữ liệu thành công!');
+*/
   await AppDataSource.destroy();
 }
 

@@ -14,8 +14,17 @@
 </template>
 
 <script setup>
+import { onMounted } from 'vue'
 import AppHeader from './components/layout/AppHeader.vue'
 import AppFooter from './components/layout/AppFooter.vue'
+import { useAuth } from './composables/useAuth.js'
+
+const { initializeAuth } = useAuth()
+
+onMounted(async () => {
+  // Khởi tạo auth state khi app khởi động
+  await initializeAuth()
+})
 </script>
 
 <style>
