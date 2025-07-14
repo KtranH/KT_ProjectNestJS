@@ -1,5 +1,5 @@
 // Controllers
-export { Task2Controller } from './task2.controller';
+export { UserController } from './controllers/user.controller';
 
 // Services
 export { UserService } from './services/user.service';
@@ -21,4 +21,4 @@ export {
 } from './interfaces/user.interface';
 
 // Module
-export { Task2Module } from './task2.module';
+export { UserModule } from './user.module';

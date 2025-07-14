@@ -4,18 +4,18 @@ import { api } from './config';
 export const Task1API = {
     getTasks: async () => {
         console.log('API: getTasks called');
-        return await api.get('/task1');
+        return await api.get('/tasks');
     },
     addTask: async (task) => {
         console.log('API: addTask called with:', task);
-        return await api.post('/task1', task);
+        return await api.post('/tasks', task);
     },
     updateTask: async (id, task) => {
         console.log('API: updateTask called with:', { id, task });
-        return await api.put(`/task1/${id}`, task);
+        return await api.put(`/tasks/${id}`, task);
     },
     deleteTask: async (id) => {
         console.log('API: deleteTask called with:', id);
-        return await api.delete(`/task1/${id}`);
+        return await api.delete(`/tasks/${id}`);
     },
 }

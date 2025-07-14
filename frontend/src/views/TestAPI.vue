@@ -268,7 +268,7 @@ const fetchUsers = async () => {
   users.value = []
 
   try {
-    const response = await fetch(`${API_BASE_URL}/users`)
+    const response = await fetch(`${API_BASE_URL}/testApi/users`)
     if (!response.ok) {
       throw new Error(`HTTP ${response.status}: ${response.statusText}`)
     }

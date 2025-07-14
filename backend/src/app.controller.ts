@@ -20,7 +20,7 @@ export class AppController {
     };
   }
 
-  @Get('users')
+  @Get('testApi/users')
   getUsers(): object[] {
     return [
       { id: 1, name: 'Nguyễn Văn A', email: 'nguyenvana@example.com' },

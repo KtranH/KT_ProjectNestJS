@@ -9,11 +9,11 @@ import {
   HttpException,
   HttpStatus,
 } from '@nestjs/common';
-import { TaskService } from './task1.service';
-import { Task } from './task1.interface';
-import { TaskRequest, UpdateTaskRequest } from './task1.request';
+import { TaskService } from '../services/task.service';
+import { Task } from '../interfaces/task.interface';
+import { CreateTaskDto, UpdateTaskDto } from '../dto';
 
-@Controller('task1')
+@Controller('tasks')
 export class TaskController {
   constructor(private readonly taskService: TaskService) {}
 
@@ -40,7 +40,7 @@ export class TaskController {
 
   // Thêm task mới
   @Post()
-  store(@Body() task: TaskRequest): object {
+  store(@Body() task: CreateTaskDto): object {
     try {
       // Tạo task với ID tự động
       const newTask: Task = {
@@ -71,7 +71,7 @@ export class TaskController {
 
   // Cập nhật task
   @Put(':id')
-  update(@Param('id') id: string, @Body() task: UpdateTaskRequest): object {
+  update(@Param('id') id: string, @Body() task: UpdateTaskDto): object {
     try {
       const taskId = parseInt(id, 10);
       if (isNaN(taskId)) {

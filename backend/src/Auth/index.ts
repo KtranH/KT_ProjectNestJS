@@ -3,7 +3,6 @@ export { AuthController } from './controllers/auth.controller';
 
 // Services
 export { AuthService } from './services/auth.service';
-export { UserService } from './services/user.service';
 
 // Guards
 export { JwtAuthGuard } from './guards/jwt-auth.guard';

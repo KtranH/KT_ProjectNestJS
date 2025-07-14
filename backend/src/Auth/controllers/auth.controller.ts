@@ -15,7 +15,7 @@ import {
   ApiBearerAuth,
 } from '@nestjs/swagger';
 import { AuthService } from '../services/auth.service';
-import { UserService } from '../services/user.service';
+import { UserService } from '../../Users/services/user.service';
 import { LoginDto } from '../dto/login.dto';
 import { RegisterDto } from '../dto/register.dto';
 import { JwtAuthGuard } from '../guards/jwt-auth.guard';
@@ -104,8 +104,8 @@ export class AuthController {
       return {
         message: 'Đăng ký thành công',
         user: {
-          id: user.id,
-          username: user.username,
+          id: user.data.id,
+          username: user.data.username,
         },
       };
     } catch (error) {
@@ -166,11 +166,11 @@ export class AuthController {
     description: 'Danh sách users',
   })
   async getAllUsers() {
-    const users = await this.userService.findAll();
+    const users = await this.userService.getAllUsers();
     return {
       status: 'success',
       message: 'Lấy danh sách users thành công',
-      data: users,
+      data: users.data,
     };
   }
 }

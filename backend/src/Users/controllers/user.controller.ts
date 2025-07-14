@@ -15,8 +15,8 @@ import {
   ApiBearerAuth,
   ApiParam,
 } from '@nestjs/swagger';
-import { UserService } from './services/user.service';
-import { CreateUserDto, UpdateUserDto } from './dto';
+import { UserService } from '../services/user.service';
+import { CreateUserDto, UpdateUserDto } from '../dto';
 import { JwtAuthGuard, CurrentUser } from '../../Auth';
 import { JwtPayload } from '../../Auth/interfaces/jwt-payload.interface';
 import {
@@ -25,13 +25,13 @@ import {
   CreateUserResponse,
   UpdateUserResponse,
   DeleteUserResponse,
-} from './interfaces/user.interface';
+} from '../interfaces/user.interface';
 
-@ApiTags('Task2 - User Management') // Đánh dấu là API thuộc task2
-@Controller('task2') // Đường dẫn API
+@ApiTags('User Management') // Đánh dấu là API thuộc task2
+@Controller('users') // Đường dẫn API
 @UseGuards(JwtAuthGuard) // Sử dụng guard để bắt buộc xác thực JWT
 @ApiBearerAuth() // Đánh dấu là API cần xác thực JWT
-export class Task2Controller {
+export class UserController {
   constructor(private readonly userService: UserService) {}
 
   // Lấy tất cả các users

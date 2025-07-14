@@ -9,6 +9,26 @@ import {
   DeleteUserResponse,
 } from '../interfaces/user.interface';
 
+// Định nghĩa kiểu UserType chuẩn
+interface UserType {
+  id: number;
+  username: string;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+// Hàm kiểm tra user có đúng kiểu UserType không
+function isUserType(user: UserType): user is UserType {
+  return (
+    user &&
+    typeof user === 'object' &&
+    typeof user.id === 'number' &&
+    typeof user.username === 'string' &&
+    (user.createdAt instanceof Date || typeof user.createdAt === 'string') &&
+    (user.updatedAt instanceof Date || typeof user.updatedAt === 'string')
+  );
+}
+
 @Injectable()
 export class UserService {
   private readonly logger = new Logger(UserService.name);
@@ -20,17 +40,29 @@ export class UserService {
     try {
       this.logger.debug('Getting all users');
       const users = await this.userRepository.findAll();
-
+      const safeUsers: UserType[] = users
+        .map((user: UserType) => {
+          if (user && typeof user === 'object') {
+            if (typeof user.createdAt === 'string') {
+              user.createdAt = new Date(user.createdAt);
+            }
+            if (typeof user.updatedAt === 'string') {
+              user.updatedAt = new Date(user.updatedAt);
+            }
+          }
+          return user;
+        })
+        .filter(isUserType);
       return {
         status: 'success',
         message: 'Lấy danh sách users thành công',
-        data: users.map((user) => ({
+        data: safeUsers.map((user) => ({
           id: user.id,
           username: user.username,
           createdAt: user.createdAt,
           updatedAt: user.updatedAt,
         })),
-        requestedBy: 'system', // Sẽ được cập nhật từ controller
+        requestedBy: 'system',
       };
     } catch (error) {
       this.logger.error('Error getting all users', error);
@@ -48,10 +80,17 @@ export class UserService {
   // Hàm lấy user theo id
   async getUserById(id: number): Promise<UserDetailResponse> {
     try {
-      this.logger.debug(`Getting user by ID: ${id}`);
-      const user = await this.userRepository.findById(id);
-
-      // Nếu không tìm thấy user, trả về lỗi
+      const rawUser = (await this.userRepository.findById(id)) as UserType;
+      let user: UserType | null = null;
+      if (rawUser && typeof rawUser === 'object') {
+        if (typeof rawUser.createdAt === 'string') {
+          rawUser.createdAt = new Date(rawUser.createdAt);
+        }
+        if (typeof rawUser.updatedAt === 'string') {
+          rawUser.updatedAt = new Date(rawUser.updatedAt);
+        }
+        if (isUserType(rawUser)) user = rawUser;
+      }
       if (!user) {
         return {
           status: 'error',
@@ -60,8 +99,6 @@ export class UserService {
           requestedBy: 'system',
         };
       }
-
-      // Nếu tìm thấy user, trả về thông tin user
       return {
         status: 'success',
         message: 'Lấy thông tin user thành công',
@@ -90,7 +127,9 @@ export class UserService {
   async createUser(createUserDto: CreateUserDto): Promise<CreateUserResponse> {
     try {
       this.logger.debug(`Creating user: ${createUserDto.username}`);
-      const newUser = await this.userRepository.createUser(createUserDto);
+      const newUser = (await this.userRepository.createUser(
+        createUserDto,
+      )) as UserType;
 
       return {
         status: 'success',
@@ -216,5 +255,32 @@ export class UserService {
   // Hàm đếm số lượng users
   async getUsersCount(): Promise<number> {
     return await this.userRepository.countUsers();
+  }
+
+  // Hàm tìm user theo username (dùng cho Auth)
+  /**
+   * Tìm user theo username (phục vụ Auth)
+   */
+  async findByUsername(username: string): Promise<UserType | null> {
+    return this.userRepository.findByUsername(username);
+  }
+
+  // Hàm tìm user theo id (dùng cho Auth)
+  /**
+   * Tìm user theo id (phục vụ Auth)
+   */
+  async findById(id: number): Promise<UserType | null> {
+    return this.userRepository.findById(id);
+  }
+
+  // Hàm xác thực user (dùng cho Auth)
+  /**
+   * Xác thực user (phục vụ Auth)
+   */
+  async validateUser(
+    username: string,
+    password: string,
+  ): Promise<UserType | null> {
+    return this.userRepository.validateUser(username, password);
   }
 }

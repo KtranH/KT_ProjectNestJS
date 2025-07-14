@@ -1,7 +1,7 @@
 import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { User } from '../../../entities/user.entity';
+import { User } from '../../entities/user.entity';
 import { CreateUserDto, UpdateUserDto } from '../dto';
 
 @Injectable()
@@ -99,5 +99,16 @@ export class UserRepository {
   // Hàm đếm số lượng users
   async countUsers(): Promise<number> {
     return await this.userRepository.count();
+  }
+
+  // Hàm xác thực user (dùng cho Auth)
+  async validateUser(username: string, password: string): Promise<User | null> {
+    const user = await this.findByUsername(username);
+    if (user && user.password) {
+      const bcrypt = await import('bcrypt');
+      const isMatch = await bcrypt.compare(password, user.password);
+      if (isMatch) return user;
+    }
+    return null;
   }
 }
