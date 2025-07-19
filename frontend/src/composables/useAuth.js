@@ -14,8 +14,12 @@ export function useAuth() {
     isAuthenticated: authStore.getIsAuthenticated,
     loading: authStore.getLoading,
     error: authStore.getError,
+    expirationTime: authStore.getExpirationTime,
+    timeUntilExpiration: authStore.getTimeUntilExpiration,
     // Hàm đăng nhập
     login: authStore.login,
+    // Hàm đăng ký
+    register: authStore.register,
     // Hàm đăng xuất
     logout: authStore.logout,
     // Hàm clear error

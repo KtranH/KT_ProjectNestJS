@@ -31,6 +31,15 @@ export class RegisterDto {
   password: string;
 
   @ApiProperty({
+    description: 'Họ và tên',
+    example: 'Nguyễn Văn A',
+  })
+  @IsNotEmpty({ message: 'Họ và tên không được để trống' })
+  @IsString({ message: 'Họ và tên phải là chuỗi' })
+  @MaxLength(255, { message: 'Họ và tên không được quá 255 ký tự' })
+  fullName: string;
+
+  @ApiProperty({
     description: 'Email',
     example: 'user@example.com',
   })

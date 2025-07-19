@@ -14,7 +14,9 @@ export const useAuthStore = defineStore('auth', {
     getUser: (state) => state.user,
     getIsAuthenticated: (state) => state.isAuthenticated,
     getLoading: (state) => state.loading,
-    getError: (state) => state.error
+    getError: (state) => state.error,
+    getExpirationTime: () => authAPI.getExpirationTime(),
+    getTimeUntilExpiration: () => authAPI.getTimeUntilExpiration()
   },
   
   actions: {
@@ -39,6 +41,21 @@ export const useAuthStore = defineStore('auth', {
       }
     },
     
+    // Hàm đăng ký
+    async register(userData) {
+      this.loading = true;
+      this.error = null;
+      try {
+        const result = await authAPI.register(userData);
+        return { success: true, data: result.data };
+      } catch (error) {
+        this.error = error.message || 'Đăng ký thất bại';
+        throw error;
+      } finally {
+        this.loading = false;
+      }
+    },
+    
     // Hàm đăng xuất
     async logout() {
       authAPI.logout();
@@ -57,10 +74,16 @@ export const useAuthStore = defineStore('auth', {
             this.user = user;
             this.isAuthenticated = true;
             this.token = localStorage.getItem('access_token');
+          } else {
+            // User không tồn tại hoặc token đã hết hạn
+            this.logout();
           }
         } catch (error) {
           this.logout();
         }
+      } else {
+        // Token đã hết hạn hoặc không tồn tại
+        this.logout();
       }
     },
     

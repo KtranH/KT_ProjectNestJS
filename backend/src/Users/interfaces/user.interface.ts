@@ -7,6 +7,12 @@ export class UserResponse {
   @ApiProperty({ description: 'Tên đăng nhập' })
   username: string;
 
+  @ApiProperty({ description: 'Họ và tên', required: false })
+  fullName?: string;
+
+  @ApiProperty({ description: 'Email', required: false })
+  email?: string;
+
   @ApiProperty({ description: 'Thời gian tạo' })
   createdAt: Date;
 

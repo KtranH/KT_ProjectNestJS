@@ -85,29 +85,25 @@ export class AuthController {
     schema: {
       type: 'object',
       properties: {
-        message: { type: 'string' },
+        access_token: { type: 'string' },
+        token_type: { type: 'string' },
+        expires_in: { type: 'number' },
         user: {
           type: 'object',
           properties: {
             id: { type: 'number' },
             username: { type: 'string' },
+            fullName: { type: 'string' },
             email: { type: 'string' },
           },
         },
       },
     },
   })
-  @ApiResponse({ status: 409, description: 'Username đã tồn tại' })
-  async register(@Body() registerDto: RegisterDto) {
+  @ApiResponse({ status: 409, description: 'Username hoặc email đã tồn tại' })
+  async register(@Body() registerDto: RegisterDto): Promise<AuthResponse> {
     try {
-      const user = await this.userService.createUser(registerDto);
-      return {
-        message: 'Đăng ký thành công',
-        user: {
-          id: user.data.id,
-          username: user.data.username,
-        },
-      };
+      return await this.authService.register(registerDto);
     } catch (error) {
       throw new HttpException(
         {
@@ -136,7 +132,18 @@ export class AuthController {
     },
   })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
-  getProfile(@CurrentUser() user: JwtPayload): UserProfile {
+  async getProfile(@CurrentUser() user: JwtPayload): Promise<UserProfile> {
+    const userProfile = await this.userService.getUserById(user.userId);
+    if (userProfile.status === 'success' && userProfile.data) {
+      return {
+        id: userProfile.data.id,
+        username: userProfile.data.username,
+        fullName: userProfile.data.fullName,
+        email: userProfile.data.email,
+        createdAt: userProfile.data.createdAt,
+        updatedAt: userProfile.data.updatedAt,
+      };
+    }
     return {
       id: user.userId,
       username: user.username,

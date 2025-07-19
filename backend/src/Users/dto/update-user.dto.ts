@@ -33,6 +33,16 @@ export class UpdateUserDto {
   password?: string;
 
   @ApiProperty({
+    description: 'Họ và tên',
+    example: 'Nguyễn Văn A',
+    required: false,
+  })
+  @IsOptional()
+  @IsString({ message: 'Họ và tên phải là chuỗi' })
+  @MaxLength(255, { message: 'Họ và tên không được quá 255 ký tự' })
+  fullName?: string;
+
+  @ApiProperty({
     description: 'Email',
     example: 'updated@example.com',
     required: false,

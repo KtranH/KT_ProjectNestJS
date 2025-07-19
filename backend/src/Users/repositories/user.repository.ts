@@ -17,7 +17,7 @@ export class UserRepository {
   async findAll(): Promise<User[]> {
     this.logger.debug('Fetching all users');
     return await this.userRepository.find({
-      select: ['id', 'username', 'createdAt', 'updatedAt'], // Không trả về password
+      select: ['id', 'username', 'fullName', 'email', 'createdAt', 'updatedAt'], // Không trả về password
     });
   }
 
@@ -26,7 +26,7 @@ export class UserRepository {
     this.logger.debug(`Fetching user by ID: ${id}`);
     return await this.userRepository.findOne({
       where: { id },
-      select: ['id', 'username', 'createdAt', 'updatedAt'],
+      select: ['id', 'username', 'fullName', 'email', 'createdAt', 'updatedAt'],
     });
   }
 
@@ -35,6 +35,14 @@ export class UserRepository {
     this.logger.debug(`Fetching user by username: ${username}`);
     return await this.userRepository.findOne({
       where: { username },
+    });
+  }
+
+  // Hàm lấy user theo email
+  async findByEmail(email: string): Promise<User | null> {
+    this.logger.debug(`Fetching user by email: ${email}`);
+    return await this.userRepository.findOne({
+      where: { email },
     });
   }
 

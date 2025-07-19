@@ -15,12 +15,16 @@ async function seed() {
   const user1 = AppDataSource.manager.create(User, {
     username: 'admin',
     password: password1,
+    fullName: 'Admin',
+    email: 'admin@example.com',
     createdAt: new Date(),
     updatedAt: new Date(),
   });
   const user2 = AppDataSource.manager.create(User, {
     username: 'user',
     password: password2,
+    fullName: 'User 2',
+    email: 'hoangkhoi230@gmail.com',
     createdAt: new Date(),
     updatedAt: new Date(),
   });

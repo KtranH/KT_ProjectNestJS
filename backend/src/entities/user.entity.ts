@@ -20,6 +20,12 @@ export class User {
   @Column({ type: 'varchar', length: 255 })
   password: string;
 
+  @Column({ type: 'varchar', length: 255, nullable: true })
+  fullName: string;
+
+  @Column({ type: 'varchar', length: 255, unique: true, nullable: true })
+  email: string;
+
   @CreateDateColumn({ name: 'created_at' })
   createdAt: Date;
 

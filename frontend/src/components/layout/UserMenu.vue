@@ -15,6 +15,11 @@
           <div class="text-xs text-gray-500">Đã đăng nhập</div>
         </div>
       </div>
+      
+      <!-- Session Expiry -->
+      <div class="hidden lg:block">
+        <SessionExpiry />
+      </div>
 
       <!-- Dropdown Menu -->
       <div class="relative">
@@ -91,6 +96,7 @@
 import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '../../stores/modules/auth.js'
+import SessionExpiry from '../ui/SessionExpiry.vue'
 
 const router = useRouter()
 const authStore = useAuthStore()

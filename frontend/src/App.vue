@@ -5,7 +5,15 @@
 
     <!-- Main Content -->
     <main class="w-full min-h-screen">
-      <router-view />
+      <router-view v-slot="{ Component, route }">
+        <transition 
+          :name="route.meta.transition || 'fade'" 
+          mode="out-in"
+          appear
+        >
+          <component :is="Component" :key="route.path" />
+        </transition>
+      </router-view>
     </main>
 
     <!-- Footer -->
@@ -94,5 +102,66 @@ html, body {
   .container, .max-w-7xl {
     max-width: 1536px;
   }
+}
+
+/* Page Transition Effects */
+/* Fade Transition */
+.fade-enter-active, .fade-leave-active {
+  transition: opacity 0.4s ease;
+}
+.fade-enter-from, .fade-leave-to {
+  opacity: 0;
+}
+
+/* Slide Left Transition */
+.slide-left-enter-active, .slide-left-leave-active {
+  transition: all 0.5s ease;
+}
+.slide-left-enter-from {
+  transform: translateX(-100%);
+  opacity: 0;
+}
+.slide-left-leave-to {
+  transform: translateX(100%);
+  opacity: 0;
+}
+
+/* Slide Right Transition */
+.slide-right-enter-active, .slide-right-leave-active {
+  transition: all 0.5s ease;
+}
+.slide-right-enter-from {
+  transform: translateX(100%);
+  opacity: 0;
+}
+.slide-right-leave-to {
+  transform: translateX(-100%);
+  opacity: 0;
+}
+
+/* Slide Up Transition */
+.slide-up-enter-active, .slide-up-leave-active {
+  transition: all 0.4s ease;
+}
+.slide-up-enter-from {
+  transform: translateY(30px);
+  opacity: 0;
+}
+.slide-up-leave-to {
+  transform: translateY(-30px);
+  opacity: 0;
+}
+
+/* Scale Transition */
+.scale-enter-active, .scale-leave-active {
+  transition: all 0.4s ease;
+}
+.scale-enter-from {
+  transform: scale(0.9);
+  opacity: 0;
+}
+.scale-leave-to {
+  transform: scale(1.1);
+  opacity: 0;
 }
 </style>

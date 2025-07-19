@@ -1,25 +1,27 @@
 <template>
-  <LoginLayout>
-    <LoginForm @submit="handleLogin" />
-  </LoginLayout>
-  
-  <!-- Success Notification -->
-  <Notification
-    :show="showSuccessMessage"
-    type="success"
-    title="Đăng nhập thành công!"
-    message="Chuyển hướng đến trang chủ..."
-    @close="showSuccessMessage = false"
-  />
-  
-  <!-- Error Notification -->
-  <Notification
-    :show="showErrorMessage"
-    type="error"
-    title="Đăng nhập thất bại"
-    :message="errorMessage"
-    @close="showErrorMessage = false"
-  />
+  <div class="login-page">
+    <LoginLayout>
+      <LoginForm @submit="handleLogin" />
+    </LoginLayout>
+    
+    <!-- Success Notification -->
+    <Notification
+      :show="showSuccessMessage"
+      type="success"
+      title="Đăng nhập thành công!"
+      message="Chuyển hướng đến trang chủ..."
+      @close="showSuccessMessage = false"
+    />
+    
+    <!-- Error Notification -->
+    <Notification
+      :show="showErrorMessage"
+      type="error"
+      title="Đăng nhập thất bại"
+      :message="errorMessage"
+      @close="showErrorMessage = false"
+    />
+  </div>
 </template>
 
 <script setup>

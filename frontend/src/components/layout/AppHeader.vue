@@ -86,6 +86,28 @@
               </span>
             </router-link>
           </div>
+          
+          <!-- Authentication Section -->
+          <div class="hidden md:flex items-center space-x-4">
+            <!-- Login/Register Links (when not authenticated) -->
+            <template v-if="!isAuthenticated">
+              <router-link 
+                to="/login"
+                class="px-4 py-2 text-sm font-medium text-gray-700 hover:text-blue-600 transition-colors"
+              >
+                Đăng nhập
+              </router-link>
+              <router-link 
+                to="/register"
+                class="px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 transition-colors"
+              >
+                Đăng ký
+              </router-link>
+            </template>
+            
+            <!-- User Menu (when authenticated) -->
+            <UserMenu v-if="isAuthenticated" />
+          </div>
         </div>
       </div>
       
@@ -152,15 +174,11 @@
       </div>
     </nav>
 </template>
-<script>
+<script setup>
 import { ref } from 'vue';
+import { useAuth } from '@/composables/useAuth';
+import UserMenu from './UserMenu.vue';
 
-export default {
-    setup() {
-        const mobileMenuOpen = ref(false);
-        return {
-            mobileMenuOpen,
-        }
-    },
-}
+const mobileMenuOpen = ref(false);
+const { isAuthenticated } = useAuth();
 </script>

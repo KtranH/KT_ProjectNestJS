@@ -13,6 +13,8 @@ import {
 interface UserType {
   id: number;
   username: string;
+  fullName?: string;
+  email?: string;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -59,6 +61,8 @@ export class UserService {
         data: safeUsers.map((user) => ({
           id: user.id,
           username: user.username,
+          fullName: user.fullName,
+          email: user.email,
           createdAt: user.createdAt,
           updatedAt: user.updatedAt,
         })),
@@ -105,6 +109,8 @@ export class UserService {
         data: {
           id: user.id,
           username: user.username,
+          fullName: user.fullName,
+          email: user.email,
           createdAt: user.createdAt,
           updatedAt: user.updatedAt,
         },
@@ -137,11 +143,59 @@ export class UserService {
         data: {
           id: newUser.id,
           username: newUser.username,
+          fullName: newUser.fullName,
+          email: newUser.email,
           createdAt: newUser.createdAt,
           updatedAt: newUser.updatedAt,
         },
         createdBy: 'system',
       };
+    } catch (error) {
+      this.logger.error(
+        `Error creating user: ${createUserDto.username}`,
+        error,
+      );
+
+      if (error instanceof Error && error.message === 'Username đã tồn tại') {
+        throw new HttpException(
+          {
+            status: 'error',
+            message: 'Username đã tồn tại',
+          },
+          HttpStatus.CONFLICT,
+        );
+      }
+
+      throw new HttpException(
+        {
+          status: 'error',
+          message: 'Lỗi khi thêm user',
+          error: error instanceof Error ? error.message : 'Unknown error',
+        },
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+  }
+
+  // Hàm tìm user theo email
+  async findByEmail(email: string): Promise<UserType | null> {
+    try {
+      return await this.userRepository.findByEmail(email);
+    } catch (error) {
+      this.logger.error(`Error finding user by email: ${email}`, error);
+      return null;
+    }
+  }
+
+  // Hàm tạo user (internal)
+  async create(createUserDto: CreateUserDto): Promise<UserType> {
+    try {
+      this.logger.debug(`Creating user: ${createUserDto.username}`);
+      const newUser = (await this.userRepository.createUser(
+        createUserDto,
+      )) as UserType;
+
+      return newUser;
     } catch (error) {
       this.logger.error(
         `Error creating user: ${createUserDto.username}`,

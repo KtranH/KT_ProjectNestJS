@@ -13,12 +13,16 @@ export interface AuthResponse {
   user: {
     id: number;
     username: string;
+    fullName?: string;
+    email?: string;
   };
 }
 
 export interface UserProfile {
   id: number;
   username: string;
+  fullName?: string;
+  email?: string;
   createdAt?: Date;
   updatedAt?: Date;
 }
