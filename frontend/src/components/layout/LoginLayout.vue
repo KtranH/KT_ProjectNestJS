@@ -103,7 +103,6 @@
 </template>
 
 <script setup>
-// Component này chỉ là layout, không cần logic phức tạp
 </script>
 
 <style scoped>

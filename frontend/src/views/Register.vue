@@ -1,69 +1,63 @@
 <template>
   <div class="register-page">
-    <RegisterLayout>
-      <RegisterForm @submit="handleRegister" />
-    </RegisterLayout>
+    <RegisterLayout 
+      :current-step="currentStep"
+      :loading="loading"
+      :errors="errors"
+      :countdown="countdown"
+      @register="handleRegister"
+      @verification="handleVerification"
+      @resend-code="handleResendCode"
+      @go-back="handleGoBack"
+      @update-form-data="handleUpdateFormData"
+    />
     
-    <!-- Success Notification -->
+    <!-- Thông báo thành công -->
     <Notification
       :show="showSuccessMessage"
       type="success"
       title="Đăng ký thành công!"
-      message="Chuyển hướng đến trang đăng nhập..."
-      @close="showSuccessMessage = false"
+      message="Chuyển hướng đến dashboard..."
+      @close="closeSuccessMessage"
     />
     
-    <!-- Error Notification -->
+    <!-- Thông báo lỗi -->
     <Notification
       :show="showErrorMessage"
       type="error"
       title="Đăng ký thất bại"
       :message="errorMessage"
-      @close="showErrorMessage = false"
+      @close="closeErrorMessage"
     />
   </div>
 </template>
 
 <script setup>
-import { ref } from 'vue'
-import { useRouter } from 'vue-router'
-import { useAuth } from '@/composables/useAuth'
 import RegisterLayout from '@/components/layout/RegisterLayout.vue'
-import RegisterForm from '@/components/forms/RegisterForm.vue'
 import Notification from '@/components/ui/Notification.vue'
+import { useRegister } from '@/composables/useRegister'
 
-const router = useRouter()
-const { register } = useAuth()
-const showSuccessMessage = ref(false)
-const showErrorMessage = ref(false)
-const errorMessage = ref('')
-
-const handleRegister = async (registerData) => {
-  try {
-    console.log('Register data:', registerData)
-    
-    const result = await register(registerData)
-    
-    if (result && result.success) {
-      showSuccessMessage.value = true
-      
-      // Redirect to login after successful registration
-      setTimeout(() => {
-        router.push('/login')
-      }, 2000)
-    } else {
-      // Nếu không thành công nhưng không có lỗi
-      showErrorMessage.value = true
-      errorMessage.value = 'Đăng ký thất bại. Vui lòng thử lại.'
-    }
-  } catch (error) {
-    console.error('Register error:', error)
-    showErrorMessage.value = true
-    errorMessage.value = error.message || 'Đăng ký thất bại. Vui lòng thử lại.'
-  }
-}
+// Sử dụng useRegister composable
+const {
+  currentStep,
+  loading,
+  countdown,
+  errors,
+  showSuccessMessage,
+  showErrorMessage,
+  errorMessage,
+  handleRegister,
+  handleVerification,
+  handleResendCode,
+  handleGoBack,
+  handleUpdateFormData,
+  closeSuccessMessage,
+  closeErrorMessage
+} = useRegister()
 </script>
 
 <style scoped>
-/* Custom styles for the register page */
+.register-page {
+  min-height: 100vh;
+}
 </style> 

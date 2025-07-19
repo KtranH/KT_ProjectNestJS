@@ -61,3 +61,7 @@ coverage/
 # Temporary files
 *.tmp
 *.temp 
+backend/src/config/database.config.ts
+backend/src/config/jwt.config.ts
+backend/src/config/mail.config.ts
+backend/src/config/redis.config.ts

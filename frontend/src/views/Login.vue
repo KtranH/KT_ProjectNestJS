@@ -4,7 +4,7 @@
       <LoginForm @submit="handleLogin" />
     </LoginLayout>
     
-    <!-- Success Notification -->
+    <!-- Thông báo thành công -->
     <Notification
       :show="showSuccessMessage"
       type="success"
@@ -13,7 +13,7 @@
       @close="showSuccessMessage = false"
     />
     
-    <!-- Error Notification -->
+    <!-- Thông báo lỗi -->
     <Notification
       :show="showErrorMessage"
       type="error"
@@ -45,12 +45,12 @@ const handleLogin = async (loginData) => {
     if (result && result.success) {
       showSuccessMessage.value = true
       
-      // Redirect to dashboard after successful login
+      // Chuyển hướng đến dashboard sau khi đăng nhập thành công
       setTimeout(() => {
         window.location.href = '/dashboard'
       }, 1000)
     } else {
-      // Nếu không thành công nhưng không có lỗi
+      // Nếu không thành công nhưng không có lỗi thì hiển thị thông báo lỗi
       showErrorMessage.value = true
       errorMessage.value = 'Đăng nhập thất bại. Vui lòng thử lại.'
     }
@@ -63,5 +63,4 @@ const handleLogin = async (loginData) => {
 </script>
 
 <style scoped>
-/* Custom styles for the login page */
 </style> 

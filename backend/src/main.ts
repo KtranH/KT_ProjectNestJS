@@ -5,6 +5,7 @@ import { Request, Response, NextFunction } from 'express';
 import * as csurf from 'csurf';
 import * as cookieParser from 'cookie-parser';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import mailConfig from './config/mail.config';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -34,6 +35,9 @@ async function bootstrap() {
       '/api/auth/login',
       '/api/auth/register',
       '/api/auth/refresh',
+      '/api/auth/register-with-verification',
+      '/api/auth/send-verification',
+      '/api/auth/resend-verification',
       '/api/health',
       '/api/docs',
       '/api/docs-json',
@@ -74,13 +78,13 @@ async function bootstrap() {
   app.setGlobalPrefix('api');
 
   // Setup Swagger Documentation
-  const config = new DocumentBuilder()
+  const swaggerConfig = new DocumentBuilder()
     .setTitle('NestJS API')
     .setDescription('API documentation cho NestJS project')
     .setVersion('1.0')
     .addBearerAuth()
     .build();
-  const document = SwaggerModule.createDocument(app, config);
+  const document = SwaggerModule.createDocument(app, swaggerConfig);
   SwaggerModule.setup('docs', app, document);
 
   const port = process.env.PORT ?? 3000;
@@ -88,5 +92,6 @@ async function bootstrap() {
 
   console.log(`🚀 Backend server đang chạy trên: http://localhost:${port}`);
   console.log(`📚 API documentation: http://localhost:${port}/api/docs`);
+  console.log(`📧 Email configured: ${mailConfig.auth.user}`);
 }
 void bootstrap();

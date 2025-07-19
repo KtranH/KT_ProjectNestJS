@@ -30,6 +30,47 @@ export const authAPI = {
             throw new Error(error.response?.data?.message || 'Đăng ký thất bại');
         }
     },
+
+    // Hàm gửi mã xác thực email
+    sendVerificationCode: async (email) => {
+        try {
+            const response = await api.post('/auth/send-verification', { email });
+            return { success: true, data: response.data };
+        } catch (error) {
+            console.error('Send verification error:', error.response?.data || error.message);
+            throw new Error(error.response?.data?.message || 'Gửi mã xác thực thất bại');
+        }
+    },
+
+    // Hàm gửi lại mã xác thực
+    resendVerificationCode: async (email) => {
+        try {
+            const response = await api.post('/auth/resend-verification', { email });
+            return { success: true, data: response.data };
+        } catch (error) {
+            console.error('Resend verification error:', error.response?.data || error.message);
+            throw new Error(error.response?.data?.message || 'Gửi lại mã xác thực thất bại');
+        }
+    },
+
+    // Hàm đăng ký với xác thực email
+    registerWithVerification: async (userData) => {
+        try {
+            const response = await api.post('/auth/register-with-verification', userData);
+            if (response.data.access_token) {
+                // Tính thời gian hết hạn (1 ngày từ bây giờ)
+                const expirationTime = Date.now() + (24 * 60 * 60 * 1000); // 24 giờ
+                
+                localStorage.setItem('access_token', response.data.access_token);
+                localStorage.setItem('user', JSON.stringify(response.data.user));
+                localStorage.setItem('auth_expiration', expirationTime.toString());
+            }
+            return { success: true, data: response.data };
+        } catch (error) {
+            console.error('Register with verification error:', error.response?.data || error.message);
+            throw new Error(error.response?.data?.message || 'Đăng ký với xác thực thất bại');
+        }
+    },
     
     // Hàm đăng xuất
     logout: () => {
@@ -58,7 +99,9 @@ export const authAPI = {
         
         if (currentTime > expirationTime) {
             // Token đã hết hạn, xóa hết
-            authAPI.logout();
+            localStorage.removeItem('access_token');
+            localStorage.removeItem('user');
+            localStorage.removeItem('auth_expiration');
             return false;
         }
         

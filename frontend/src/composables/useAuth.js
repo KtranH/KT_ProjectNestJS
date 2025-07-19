@@ -1,4 +1,5 @@
 import { useAuthStore } from '../stores/modules/auth.js'
+import { computed } from 'vue'
 
 export function useAuth() {
   const authStore = useAuthStore();
@@ -10,12 +11,12 @@ export function useAuth() {
 
   // Hàm trả về các thông tin xác thực
   return {
-    user: authStore.getUser,
-    isAuthenticated: authStore.getIsAuthenticated,
-    loading: authStore.getLoading,
-    error: authStore.getError,
-    expirationTime: authStore.getExpirationTime,
-    timeUntilExpiration: authStore.getTimeUntilExpiration,
+    user: computed(() => authStore.getUser),
+    isAuthenticated: computed(() => authStore.getIsAuthenticated),
+    loading: computed(() => authStore.getLoading),
+    error: computed(() => authStore.getError),
+    expirationTime: computed(() => authStore.getExpirationTime),
+    timeUntilExpiration: computed(() => authStore.getTimeUntilExpiration),
     // Hàm đăng nhập
     login: authStore.login,
     // Hàm đăng ký
@@ -27,4 +28,5 @@ export function useAuth() {
     // Hàm khởi tạo xác thực
     initializeAuth,
   };
+
 }

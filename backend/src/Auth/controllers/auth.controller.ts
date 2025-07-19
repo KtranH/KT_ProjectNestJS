@@ -18,6 +18,8 @@ import { AuthService } from '../services/auth.service';
 import { UserService } from '../../Users/services/user.service';
 import { LoginDto } from '../dto/login.dto';
 import { RegisterDto } from '../dto/register.dto';
+import { RegisterWithVerificationDto } from '../dto/register-with-verification.dto';
+import { SendVerificationDto } from '../dto/send-verification.dto';
 import { JwtAuthGuard } from '../guards/jwt-auth.guard';
 import { CurrentUser } from '../decorators/current-user.decorator';
 import {
@@ -138,8 +140,8 @@ export class AuthController {
       return {
         id: userProfile.data.id,
         username: userProfile.data.username,
-        fullName: userProfile.data.fullName,
-        email: userProfile.data.email,
+        fullName: (userProfile.data.fullName as string) || '',
+        email: (userProfile.data.email as string) || '',
         createdAt: userProfile.data.createdAt,
         updatedAt: userProfile.data.updatedAt,
       };
@@ -147,6 +149,10 @@ export class AuthController {
     return {
       id: user.userId,
       username: user.username,
+      fullName: '',
+      email: '',
+      createdAt: new Date(),
+      updatedAt: new Date(),
     };
   }
 
@@ -179,5 +185,77 @@ export class AuthController {
       message: 'Lấy danh sách users thành công',
       data: users.data,
     };
+  }
+
+  // Gửi mã xác thực email
+  @Post('send-verification')
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({ summary: 'Gửi mã xác thực email' })
+  @ApiResponse({
+    status: 200,
+    description: 'Mã xác thực đã được gửi',
+    schema: {
+      example: {
+        message:
+          'Mã xác thực đã được gửi đến email của bạn. Vui lòng kiểm tra hộp thư.',
+      },
+    },
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'Email không hợp lệ hoặc đã được sử dụng',
+  })
+  async sendVerificationCode(@Body() sendVerificationDto: SendVerificationDto) {
+    return this.authService.sendVerificationCode(sendVerificationDto);
+  }
+
+  // Gửi lại mã xác thực
+  @Post('resend-verification')
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({ summary: 'Gửi lại mã xác thực email' })
+  @ApiResponse({
+    status: 200,
+    description: 'Mã xác thực mới đã được gửi',
+    schema: {
+      example: {
+        message: 'Mã xác thực mới đã được gửi đến email của bạn.',
+      },
+    },
+  })
+  async resendVerificationCode(
+    @Body() sendVerificationDto: SendVerificationDto,
+  ) {
+    return this.authService.resendVerificationCode(sendVerificationDto);
+  }
+
+  // Đăng ký với xác thực email
+  @Post('register-with-verification')
+  @HttpCode(HttpStatus.CREATED)
+  @ApiOperation({ summary: 'Đăng ký tài khoản với xác thực email' })
+  @ApiResponse({
+    status: 201,
+    description: 'Đăng ký thành công',
+    schema: {
+      example: {
+        access_token: 'jwt-token-here',
+        token_type: 'Bearer',
+        expires_in: 3600,
+        user: {
+          id: 1,
+          username: 'johndoe',
+          fullName: 'John Doe',
+          email: 'john@example.com',
+        },
+      },
+    },
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'Dữ liệu không hợp lệ hoặc mã xác thực không đúng',
+  })
+  async registerWithVerification(
+    @Body() registerDto: RegisterWithVerificationDto,
+  ): Promise<AuthResponse> {
+    return this.authService.registerWithVerification(registerDto);
   }
 }

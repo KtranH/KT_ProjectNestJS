@@ -65,7 +65,7 @@
     </div>
 
     <!-- Right Side - Register Form -->
-    <div class="flex-1 mt-10 flex items-center justify-center px-4 sm:px-6 lg:px-8">
+    <div class="flex-1 mt-24 flex items-center justify-center px-4 sm:px-6 lg:px-8 bg-gray-50">
       <div class="w-full max-w-md space-y-8">
         <!-- Header -->
         <div class="text-center">
@@ -85,8 +85,20 @@
           </p>
         </div>
 
-        <!-- Register Form -->
-        <slot></slot>
+        <!-- Register Form with Card Style -->
+        <div class="bg-white py-8 px-6 shadow-lg rounded-lg border border-gray-200">
+          <RegisterForm 
+            :current-step="currentStep"
+            :loading="loading"
+            :errors="errors"
+            :countdown="countdown"
+            @register="$emit('register', $event)"
+            @verification="$emit('verification', $event)"
+            @resend-code="$emit('resend-code', $event)"
+            @go-back="$emit('go-back')"
+            @update-form-data="$emit('update-form-data', $event)"
+          />
+        </div>
 
         <!-- Footer -->
         <div class="text-center">
@@ -103,7 +115,36 @@
 </template>
 
 <script setup>
-// Component này chỉ là layout, không cần logic phức tạp
+import RegisterForm from '@/components/forms/RegisterForm.vue'
+
+// Props
+defineProps({
+  currentStep: {
+    type: String,
+    default: 'register'
+  },
+  loading: {
+    type: Boolean,
+    default: false
+  },
+  errors: {
+    type: Object,
+    default: () => ({})
+  },
+  countdown: {
+    type: Number,
+    default: 0
+  }
+})
+
+// Emits
+defineEmits([
+  'register',
+  'verification', 
+  'resend-code',
+  'go-back',
+  'update-form-data'
+])
 </script>
 
 <style scoped>

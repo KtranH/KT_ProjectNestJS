@@ -41,13 +41,19 @@ export const useAuthStore = defineStore('auth', {
       }
     },
     
-    // Hàm đăng ký
+    // Hàm đăng ký với xác thực
     async register(userData) {
       this.loading = true;
       this.error = null;
       try {
-        const result = await authAPI.register(userData);
-        return { success: true, data: result.data };
+        const result = await authAPI.registerWithVerification(userData);
+        if (result.success && result.data.access_token) {
+          this.user = result.data.user;
+          this.token = result.data.access_token;
+          this.isAuthenticated = true;
+          return { success: true, data: result.data };
+        }
+        return result;
       } catch (error) {
         this.error = error.message || 'Đăng ký thất bại';
         throw error;

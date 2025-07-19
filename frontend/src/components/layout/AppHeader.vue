@@ -170,15 +170,44 @@
               Về chúng tôi
             </span>
           </router-link>
+          
+          <!-- Mobile Authentication Section -->
+          <div class="border-t border-gray-200 pt-4 mt-4">
+            <!-- Login/Register Links (when not authenticated) -->
+            <template v-if="!isAuthenticated">
+              <router-link 
+                to="/login"
+                class="block px-3 py-2 rounded-lg text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-blue-50 transition-colors"
+                @click="mobileMenuOpen = false"
+              >
+                Đăng nhập
+              </router-link>
+              <router-link 
+                to="/register"
+                class="block px-3 py-2 rounded-lg text-base font-medium bg-blue-600 text-white hover:bg-blue-700 transition-colors"
+                @click="mobileMenuOpen = false"
+              >
+                Đăng ký
+              </router-link>
+            </template>
+            
+            <!-- User Menu (when authenticated) -->
+            <UserMenu v-if="isAuthenticated" @click="mobileMenuOpen = false" />
+          </div>
         </div>
       </div>
     </nav>
 </template>
 <script setup>
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 import { useAuth } from '@/composables/useAuth';
 import UserMenu from './UserMenu.vue';
 
 const mobileMenuOpen = ref(false);
-const { isAuthenticated } = useAuth();
+const { isAuthenticated, initializeAuth } = useAuth();
+
+// Khởi tạo auth khi component mount
+onMounted(async () => {
+  await initializeAuth();
+});
 </script>

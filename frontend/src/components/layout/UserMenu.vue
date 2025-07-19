@@ -11,7 +11,7 @@
           </div>
         </div>
         <div class="hidden md:block">
-          <div class="text-sm font-medium text-gray-900">{{ authStore.getUser?.username }}</div>
+          <div class="text-sm font-medium text-gray-900">{{ user?.username }}</div>
           <div class="text-xs text-gray-500">Đã đăng nhập</div>
         </div>
       </div>
@@ -103,10 +103,10 @@ const authStore = useAuthStore()
 
 const isDropdownOpen = ref(false)
 
+const user = computed(() => authStore.getUser)
 const userInitials = computed(() => {
-  const user = authStore.getUser
-  if (!user?.username) return 'U'
-  return user.username.charAt(0).toUpperCase()
+  if (!user.value?.username) return 'U'
+  return user.value.username.charAt(0).toUpperCase()
 })
 
 const toggleDropdown = () => {
