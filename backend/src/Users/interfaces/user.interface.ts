@@ -1,5 +1,8 @@
 import { ApiProperty } from '@nestjs/swagger';
 
+//===============================================
+// Interface cho việc trả về user
+//===============================================
 export class UserResponse {
   @ApiProperty({ description: 'ID của user' })
   id: number;
@@ -20,6 +23,9 @@ export class UserResponse {
   updatedAt: Date;
 }
 
+//===============================================
+// Interface cho việc trả về danh sách user
+//===============================================
 export class UserListResponse {
   @ApiProperty({ description: 'Trạng thái response' })
   status: string;
@@ -34,6 +40,9 @@ export class UserListResponse {
   requestedBy: string;
 }
 
+//===============================================
+// Interface cho việc trả về chi tiết user
+//===============================================
 export class UserDetailResponse {
   @ApiProperty({ description: 'Trạng thái response' })
   status: string;
@@ -48,6 +57,9 @@ export class UserDetailResponse {
   requestedBy: string;
 }
 
+//===============================================
+// Interface cho việc trả về kết quả tạo user
+//===============================================
 export class CreateUserResponse {
   @ApiProperty({ description: 'Trạng thái response' })
   status: string;
@@ -62,6 +74,9 @@ export class CreateUserResponse {
   createdBy: string;
 }
 
+//===============================================
+// Interface cho việc trả về kết quả cập nhật user
+//===============================================
 export class UpdateUserResponse {
   @ApiProperty({ description: 'Trạng thái response' })
   status: string;
@@ -73,6 +88,9 @@ export class UpdateUserResponse {
   updatedBy: string;
 }
 
+//===============================================
+// Interface cho việc trả về kết quả xóa user
+//===============================================
 export class DeleteUserResponse {
   @ApiProperty({ description: 'Trạng thái response' })
   status: string;

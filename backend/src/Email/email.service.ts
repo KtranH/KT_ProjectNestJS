@@ -19,6 +19,10 @@ export class EmailService {
       },
     });
   }
+
+  //===============================================
+  // Hàm lấy template cho việc gửi email xác thực
+  //===============================================
   private getVerificationTemplate(): handlebars.TemplateDelegate {
     const template = `
       <!DOCTYPE html>
@@ -59,6 +63,9 @@ export class EmailService {
     return handlebars.compile(template);
   }
 
+  //===============================================
+  // Hàm lấy template cho việc gửi email chào mừng
+  //===============================================
   private getWelcomeTemplate(): handlebars.TemplateDelegate {
     const template = `
       <!DOCTYPE html>
@@ -95,6 +102,9 @@ export class EmailService {
     return handlebars.compile(template);
   }
 
+  //===============================================
+  // Hàm gửi email xác thực
+  //===============================================
   async sendVerificationEmail(
     email: string,
     verificationCode: string,
@@ -124,6 +134,9 @@ export class EmailService {
     }
   }
 
+  //===============================================
+  // Hàm gửi email chào mừng
+  //===============================================
   async sendWelcomeEmail(email: string, username: string): Promise<void> {
     try {
       const template = this.getWelcomeTemplate();

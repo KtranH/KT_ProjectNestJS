@@ -19,7 +19,9 @@ export class VerificationService {
     private readonly userService: UserService,
   ) {}
 
-  // Tạo mã xác thực
+  //===============================================
+  // Hàm tạo mã xác thực
+  //===============================================
   async generateVerificationCode(email: string): Promise<string> {
     // Kiểm tra email đã tồn tại chưa
     const existingUser = await this.userService.findByEmail(email);
@@ -62,7 +64,9 @@ export class VerificationService {
     return verificationCode;
   }
 
-  // Xác thực mã xác thực
+  //===============================================
+  // Hàm xác thực mã xác thực
+  //===============================================
   async verifyCode(email: string, code: string): Promise<boolean> {
     const key = `verification:${email}`;
 
@@ -97,7 +101,9 @@ export class VerificationService {
     }
   }
 
-  // Gửi lại mã xác thực
+  //===============================================
+  // Hàm gửi lại mã xác thực
+  //===============================================
   async resendVerificationCode(email: string): Promise<string> {
     // Xóa mã cũ nếu có
     const key = `verification:${email}`;
@@ -107,7 +113,9 @@ export class VerificationService {
     return this.generateVerificationCode(email);
   }
 
-  // Kiểm tra mã xác thực có tồn tại không
+  //===============================================
+  // Hàm kiểm tra mã xác thực có tồn tại không
+  //===============================================
   async checkCodeExists(email: string): Promise<boolean> {
     const key = `verification:${email}`;
     const storedCode = await this.cacheManager.get<string>(key);

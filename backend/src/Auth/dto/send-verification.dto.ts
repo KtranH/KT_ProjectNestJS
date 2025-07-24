@@ -1,6 +1,9 @@
 import { IsEmail, IsNotEmpty } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
+//===============================================
+// DTO cho việc gửi mã xác thực
+//===============================================
 export class SendVerificationDto {
   @ApiProperty({
     example: 'user@example.com',

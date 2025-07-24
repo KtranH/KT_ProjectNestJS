@@ -15,7 +15,9 @@ export class JwtAuthGuard implements CanActivate {
 
   constructor(private jwtService: JwtService) {}
 
+  //===============================================
   // Hàm kiểm tra xác thực
+  //===============================================
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request: Request = context.switchToHttp().getRequest();
     const token = this.extractTokenFromHeader(request);
@@ -41,7 +43,9 @@ export class JwtAuthGuard implements CanActivate {
     }
   }
 
+  //===============================================
   // Hàm trích xuất token từ header
+  //===============================================
   private extractTokenFromHeader(request: Request): string | undefined {
     const [type, token] = request.headers.authorization?.split(' ') ?? [];
     return type === 'Bearer' ? token : undefined;

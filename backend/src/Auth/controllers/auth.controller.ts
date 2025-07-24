@@ -36,7 +36,9 @@ export class AuthController {
     private readonly userService: UserService,
   ) {}
 
+  //===============================================
   // Hàm đăng nhập
+  //===============================================
   @Post('login')
   @HttpCode(HttpStatus.OK)
   @ApiOperation({ summary: 'Đăng nhập user' })
@@ -77,7 +79,9 @@ export class AuthController {
     }
   }
 
+  //===============================================
   // Hàm đăng ký
+  //===============================================
   @Post('register')
   @HttpCode(HttpStatus.CREATED)
   @ApiOperation({ summary: 'Đăng ký user mới' })
@@ -117,7 +121,9 @@ export class AuthController {
     }
   }
 
+  //===============================================
   // Hàm lấy thông tin profile
+  //===============================================
   @Get('profile')
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
@@ -156,7 +162,9 @@ export class AuthController {
     };
   }
 
+  //===============================================
   // Hàm làm mới token
+  //===============================================
   @Post('refresh')
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
@@ -169,7 +177,9 @@ export class AuthController {
     return await this.authService.refreshToken(user.userId);
   }
 
+  //===============================================
   // Hàm lấy danh sách users
+  //===============================================
   @Get('users')
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
@@ -187,7 +197,9 @@ export class AuthController {
     };
   }
 
-  // Gửi mã xác thực email
+  //===============================================
+  // Hàm gửi mã xác thực email
+  //===============================================
   @Post('send-verification')
   @HttpCode(HttpStatus.OK)
   @ApiOperation({ summary: 'Gửi mã xác thực email' })
@@ -209,7 +221,9 @@ export class AuthController {
     return this.authService.sendVerificationCode(sendVerificationDto);
   }
 
-  // Gửi lại mã xác thực
+  //===============================================
+  // Hàm gửi lại mã xác thực
+  //===============================================
   @Post('resend-verification')
   @HttpCode(HttpStatus.OK)
   @ApiOperation({ summary: 'Gửi lại mã xác thực email' })
@@ -228,7 +242,9 @@ export class AuthController {
     return this.authService.resendVerificationCode(sendVerificationDto);
   }
 
-  // Đăng ký với xác thực email
+  //===============================================
+  // Hàm đăng ký với xác thực email
+  //===============================================
   @Post('register-with-verification')
   @HttpCode(HttpStatus.CREATED)
   @ApiOperation({ summary: 'Đăng ký tài khoản với xác thực email' })

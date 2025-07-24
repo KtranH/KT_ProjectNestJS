@@ -4,6 +4,9 @@ import { User } from '../../entities/user.entity';
 //import { Comment } from '../../entities/comment.entity';
 import * as bcrypt from 'bcrypt';
 
+//===============================================
+// Hàm seed dữ liệu
+//===============================================
 async function seed() {
   await AppDataSource.initialize();
 

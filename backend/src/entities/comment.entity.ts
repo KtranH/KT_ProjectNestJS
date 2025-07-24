@@ -10,6 +10,9 @@ import {
 import { User } from './user.entity';
 import { Task } from './task.entity';
 
+//===============================================
+// Entity cho việc tạo bảng comments
+//===============================================
 @Entity('comments')
 export class Comment {
   @PrimaryGeneratedColumn()

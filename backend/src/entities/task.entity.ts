@@ -18,6 +18,9 @@ export enum TaskStatus {
   DONE = 'done',
 }
 
+//===============================================
+// Entity cho việc tạo bảng tasks
+//===============================================
 @Entity('tasks')
 export class Task {
   @PrimaryGeneratedColumn()

@@ -7,6 +7,9 @@ import {
 } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
+//===============================================
+// DTO cho việc đăng ký với xác thực email
+//===============================================
 export class RegisterWithVerificationDto {
   @ApiProperty({ example: 'johndoe' })
   @IsString()

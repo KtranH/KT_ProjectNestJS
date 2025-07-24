@@ -7,6 +7,9 @@ import {
 } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
+//===============================================
+// DTO cho việc cập nhật user
+//===============================================
 export class UpdateUserDto {
   @ApiProperty({
     description: 'Tên đăng nhập',

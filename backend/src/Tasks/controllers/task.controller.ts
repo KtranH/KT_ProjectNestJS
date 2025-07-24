@@ -17,7 +17,9 @@ import { CreateTaskDto, UpdateTaskDto } from '../dto';
 export class TaskController {
   constructor(private readonly taskService: TaskService) {}
 
-  // Lấy tất cả các tasks
+  //===============================================
+  // Hàm lấy tất cả các tasks
+  //===============================================
   @Get()
   get(): object {
     try {
@@ -38,7 +40,9 @@ export class TaskController {
     }
   }
 
-  // Thêm task mới
+  //===============================================
+  // Hàm thêm task mới
+  //===============================================
   @Post()
   store(@Body() task: CreateTaskDto): object {
     try {
@@ -69,7 +73,9 @@ export class TaskController {
     }
   }
 
-  // Cập nhật task
+  //===============================================
+  // Hàm cập nhật task
+  //===============================================
   @Put(':id')
   update(@Param('id') id: string, @Body() task: UpdateTaskDto): object {
     try {
@@ -105,7 +111,9 @@ export class TaskController {
     }
   }
 
-  // Xóa task
+  //===============================================
+  // Hàm xóa task
+  //===============================================
   @Delete(':id')
   delete(@Param('id') id: string): object {
     try {

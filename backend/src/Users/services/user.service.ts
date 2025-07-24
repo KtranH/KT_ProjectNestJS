@@ -1,4 +1,10 @@
-import { Injectable, Logger, HttpException, HttpStatus } from '@nestjs/common';
+import {
+  Injectable,
+  Logger,
+  HttpException,
+  HttpStatus,
+  Inject,
+} from '@nestjs/common';
 import { UserRepository } from '../repositories/user.repository';
 import { CreateUserDto, UpdateUserDto } from '../dto';
 import {
@@ -8,6 +14,8 @@ import {
   UpdateUserResponse,
   DeleteUserResponse,
 } from '../interfaces/user.interface';
+
+import { Redis } from 'ioredis';
 
 // Định nghĩa kiểu UserType chuẩn
 interface UserType {
@@ -35,13 +43,41 @@ function isUserType(user: UserType): user is UserType {
 export class UserService {
   private readonly logger = new Logger(UserService.name);
 
-  constructor(private readonly userRepository: UserRepository) {}
+  constructor(
+    private readonly userRepository: UserRepository,
+    @Inject('REDIS_CLIENT') private readonly redisClient: Redis,
+  ) {}
 
+  //===============================================
   // Hàm lấy tất cả users
+  //===============================================
   async getAllUsers(): Promise<UserListResponse> {
     try {
       this.logger.debug('Getting all users');
-      const users = await this.userRepository.findAll();
+
+      let users: UserType[] = [];
+      // Kiểm tra xem có dữ liệu trong Redis không
+      const cachedUsers = await this.redisClient.get('AllUsers');
+      if (cachedUsers) {
+        users = JSON.parse(cachedUsers) as UserType[];
+        this.logger.debug('Đã lấy dữ liệu từ Redis');
+      } else {
+        // Nếu không có dữ liệu trong Redis, lấy từ database
+        users = (await this.userRepository.findAll()) as UserType[];
+        const plainUsers = users.map((user) => ({
+          id: user.id,
+          username: user.username,
+          fullName: user.fullName,
+          email: user.email,
+          createdAt: user.createdAt,
+          updatedAt: user.updatedAt,
+        }));
+        // Cache vào Redis
+        await this.redisClient.set('AllUsers', JSON.stringify(plainUsers));
+        this.logger.debug('Đã cache vào Redis');
+      }
+
+      // Lọc các user không hợp lệ
       const safeUsers: UserType[] = users
         .map((user: UserType) => {
           if (user && typeof user === 'object') {
@@ -81,9 +117,12 @@ export class UserService {
     }
   }
 
+  //===============================================
   // Hàm lấy user theo id
+  //===============================================
   async getUserById(id: number): Promise<UserDetailResponse> {
     try {
+      // Lấy dữ liệu từ database
       const rawUser = (await this.userRepository.findById(id)) as UserType;
       let user: UserType | null = null;
       if (rawUser && typeof rawUser === 'object') {
@@ -129,7 +168,9 @@ export class UserService {
     }
   }
 
+  //===============================================
   // Hàm tạo user
+  //===============================================
   async createUser(createUserDto: CreateUserDto): Promise<CreateUserResponse> {
     try {
       this.logger.debug(`Creating user: ${createUserDto.username}`);
@@ -177,7 +218,9 @@ export class UserService {
     }
   }
 
+  //===============================================
   // Hàm tìm user theo email
+  //===============================================
   async findByEmail(email: string): Promise<UserType | null> {
     try {
       return await this.userRepository.findByEmail(email);
@@ -187,7 +230,9 @@ export class UserService {
     }
   }
 
+  //===============================================
   // Hàm tạo user (internal)
+  //===============================================
   async create(createUserDto: CreateUserDto): Promise<UserType> {
     try {
       this.logger.debug(`Creating user: ${createUserDto.username}`);
@@ -223,7 +268,9 @@ export class UserService {
     }
   }
 
+  //===============================================
   // Hàm cập nhật user
+  //===============================================
   async updateUser(
     id: number,
     updateUserDto: UpdateUserDto,
@@ -271,7 +318,9 @@ export class UserService {
     }
   }
 
+  //===============================================
   // Hàm xóa user
+  //===============================================
   async deleteUser(id: number): Promise<DeleteUserResponse> {
     try {
       this.logger.debug(`Deleting user ID: ${id}`);
@@ -306,31 +355,30 @@ export class UserService {
     }
   }
 
+  //===============================================
   // Hàm đếm số lượng users
+  //===============================================
   async getUsersCount(): Promise<number> {
     return await this.userRepository.countUsers();
   }
 
+  //===============================================
   // Hàm tìm user theo username (dùng cho Auth)
-  /**
-   * Tìm user theo username (phục vụ Auth)
-   */
+  //===============================================
   async findByUsername(username: string): Promise<UserType | null> {
     return this.userRepository.findByUsername(username);
   }
 
+  //===============================================
   // Hàm tìm user theo id (dùng cho Auth)
-  /**
-   * Tìm user theo id (phục vụ Auth)
-   */
+  //===============================================
   async findById(id: number): Promise<UserType | null> {
     return this.userRepository.findById(id);
   }
 
+  //===============================================
   // Hàm xác thực user (dùng cho Auth)
-  /**
-   * Xác thực user (phục vụ Auth)
-   */
+  //===============================================
   async validateUser(
     username: string,
     password: string,

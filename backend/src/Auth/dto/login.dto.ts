@@ -1,6 +1,9 @@
 import { IsNotEmpty, IsString, MinLength, MaxLength } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
+//===============================================
+// DTO cho việc đăng nhập
+//===============================================
 export class LoginDto {
   @ApiProperty({
     description: 'Tên đăng nhập',

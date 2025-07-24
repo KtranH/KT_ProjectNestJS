@@ -1,3 +1,6 @@
+//===============================================
+// Interface cho việc trả về payload của JWT
+//===============================================
 export interface JwtPayload {
   username: string;
   sub: number;
@@ -6,6 +9,9 @@ export interface JwtPayload {
   exp?: number; // Expiration time
 }
 
+//===============================================
+// Interface cho việc trả về response của auth
+//===============================================
 export interface AuthResponse {
   access_token: string;
   token_type: string;
@@ -18,6 +24,9 @@ export interface AuthResponse {
   };
 }
 
+//===============================================
+// Interface cho việc trả về profile của user
+//===============================================
 export interface UserProfile {
   id: number;
   username: string;

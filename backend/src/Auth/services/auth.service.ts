@@ -29,7 +29,9 @@ export class AuthService {
     @Inject(CACHE_MANAGER) private cacheManager: Cache,
   ) {}
 
+  //===============================================
   // Hàm đăng nhập
+  //===============================================
   async login(loginDto: LoginDto): Promise<AuthResponse> {
     this.logger.debug(`Login attempt for user: ${loginDto.username}`);
 
@@ -68,7 +70,9 @@ export class AuthService {
     };
   }
 
+  //===============================================
   // Hàm xác thực token
+  //===============================================
   validateToken(token: string): JwtPayload {
     try {
       const payload: JwtPayload = this.jwtService.verify(token);
@@ -83,7 +87,9 @@ export class AuthService {
     }
   }
 
+  //===============================================
   // Hàm đăng ký
+  //===============================================
   async register(registerDto: RegisterDto): Promise<AuthResponse> {
     // Kiểm tra username đã tồn tại chưa
     const existingUser = await this.userService.findByUsername(
@@ -138,7 +144,9 @@ export class AuthService {
     };
   }
 
+  //===============================================
   // Hàm làm mới token
+  //===============================================
   async refreshToken(userId: number): Promise<AuthResponse> {
     const user = await this.userService.findById(userId);
     if (!user) {
@@ -168,7 +176,9 @@ export class AuthService {
     };
   }
 
+  //===============================================
   // Hàm gửi mã xác thực email
+  //===============================================
   async sendVerificationCode(
     sendVerificationDto: SendVerificationDto,
   ): Promise<{ message: string }> {
@@ -189,7 +199,9 @@ export class AuthService {
     }
   }
 
+  //===============================================
   // Hàm gửi lại mã xác thực
+  //===============================================
   async resendVerificationCode(
     sendVerificationDto: SendVerificationDto,
   ): Promise<{ message: string }> {
@@ -209,7 +221,9 @@ export class AuthService {
     }
   }
 
+  //===============================================
   // Hàm đăng ký với xác thực email
+  //===============================================
   async registerWithVerification(
     registerDto: RegisterWithVerificationDto,
   ): Promise<AuthResponse> {

@@ -16,7 +16,9 @@ export class TaskService {
     },
   ];
 
-  // Lấy tất cả các tasks
+  //===============================================
+  // Hàm lấy tất cả các tasks
+  //===============================================
   getAllTasks(): Task[] {
     try {
       return this.tasks;
@@ -25,7 +27,10 @@ export class TaskService {
       throw error;
     }
   }
-  // Bổ sung thêm task mới
+
+  //===============================================
+  // Hàm bổ sung thêm task mới
+  //===============================================
   addTask(task: Task): Task {
     try {
       this.tasks.push(task);
@@ -35,7 +40,10 @@ export class TaskService {
       throw error;
     }
   }
-  // Xóa task
+
+  //===============================================
+  // Hàm xóa task
+  //===============================================
   deleteTask(id: number): Task[] {
     try {
       this.tasks = this.tasks.filter((task) => task.id !== id);
@@ -45,7 +53,10 @@ export class TaskService {
       throw error;
     }
   }
-  // Cập nhật task
+
+  //===============================================
+  // Hàm cập nhật task
+  //===============================================
   updateTask(id: number, taskUpdate: Partial<Task>): Task {
     try {
       const index = this.tasks.findIndex((task) => task.id === id);

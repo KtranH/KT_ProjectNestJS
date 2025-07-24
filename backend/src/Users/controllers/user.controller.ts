@@ -27,14 +27,16 @@ import {
   DeleteUserResponse,
 } from '../interfaces/user.interface';
 
-@ApiTags('User Management') // Đánh dấu là API thuộc task2
+@ApiTags('User Management') // Đánh dấu là API thuộc user
 @Controller('users') // Đường dẫn API
 @UseGuards(JwtAuthGuard) // Sử dụng guard để bắt buộc xác thực JWT
 @ApiBearerAuth() // Đánh dấu là API cần xác thực JWT
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
-  // Lấy tất cả các users
+  //===============================================
+  // Hàm lấy tất cả các users
+  //===============================================
   @Get()
   @ApiOperation({ summary: 'Lấy danh sách tất cả users' })
   @ApiResponse({
@@ -48,7 +50,9 @@ export class UserController {
     return response;
   }
 
-  // Lấy thông tin user theo id
+  //===============================================
+  // Hàm lấy thông tin user theo id
+  //===============================================
   @Get(':id')
   @ApiOperation({ summary: 'Lấy thông tin user theo ID' })
   @ApiParam({ name: 'id', description: 'ID của user' })
@@ -66,7 +70,9 @@ export class UserController {
     return response;
   }
 
-  // Thêm user
+  //===============================================
+  // Hàm thêm user
+  //===============================================
   @Post()
   @ApiOperation({ summary: 'Thêm user mới' })
   @ApiResponse({
@@ -83,7 +89,9 @@ export class UserController {
     return response;
   }
 
-  // Cập nhật user
+  //===============================================
+  // Hàm cập nhật user
+  //===============================================
   @Put(':id')
   @ApiOperation({ summary: 'Cập nhật user theo ID' })
   @ApiParam({ name: 'id', description: 'ID của user' })
@@ -105,7 +113,9 @@ export class UserController {
     return response;
   }
 
-  // Xóa user
+  //===============================================
+  // Hàm xóa user
+  //===============================================
   @Delete(':id')
   @ApiOperation({ summary: 'Xóa user theo ID' })
   @ApiParam({ name: 'id', description: 'ID của user' })

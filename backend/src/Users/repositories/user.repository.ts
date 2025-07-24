@@ -11,14 +11,18 @@ export class UserRepository {
     private readonly userRepository: Repository<User>,
   ) {}
 
+  //===============================================
   // Hàm lấy tất cả users
+  //===============================================
   async findAll(): Promise<User[]> {
     return await this.userRepository.find({
       select: ['id', 'username', 'fullName', 'email', 'createdAt', 'updatedAt'], // Không trả về password
     });
   }
 
+  //===============================================
   // Hàm lấy user theo id
+  //===============================================
   async findById(id: number): Promise<User | null> {
     return await this.userRepository.findOne({
       where: { id },
@@ -26,21 +30,27 @@ export class UserRepository {
     });
   }
 
+  //===============================================
   // Hàm lấy user theo username
+  //===============================================
   async findByUsername(username: string): Promise<User | null> {
     return await this.userRepository.findOne({
       where: { username },
     });
   }
 
+  //===============================================
   // Hàm lấy user theo email
+  //===============================================
   async findByEmail(email: string): Promise<User | null> {
     return await this.userRepository.findOne({
       where: { email },
     });
   }
 
+  //===============================================
   // Hàm tạo user
+  //===============================================
   async createUser(createUserDto: CreateUserDto): Promise<User> {
     // Kiểm tra username đã tồn tại chưa
     const existingUser = await this.findByUsername(createUserDto.username);
@@ -58,7 +68,9 @@ export class UserRepository {
     return savedUser;
   }
 
+  //===============================================
   // Hàm cập nhật user
+  //===============================================
   async updateUser(id: number, updateUserDto: UpdateUserDto): Promise<User> {
     const user = await this.findById(id);
     if (!user) {
@@ -79,7 +91,9 @@ export class UserRepository {
     return updatedUser;
   }
 
+  //===============================================
   // Hàm xóa user
+  //===============================================
   async deleteUser(id: number): Promise<void> {
     const user = await this.findById(id);
     if (!user) {
@@ -88,12 +102,16 @@ export class UserRepository {
     await this.userRepository.remove(user);
   }
 
+  //===============================================
   // Hàm đếm số lượng users
+  //===============================================
   async countUsers(): Promise<number> {
     return await this.userRepository.count();
   }
 
+  //===============================================
   // Hàm xác thực user (dùng cho Auth)
+  //===============================================
   async validateUser(username: string, password: string): Promise<User | null> {
     const user = await this.findByUsername(username);
     if (user && user.password) {
